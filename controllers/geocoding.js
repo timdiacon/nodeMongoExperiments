@@ -1,20 +1,23 @@
 var models = require('../app/models');
-var geocoderProvider = 'google';
+var geocoderProvider = 'datasciencetoolkit';
 var httpAdapter = 'http';
 var geocoder = require('node-geocoder').getGeocoder(geocoderProvider, httpAdapter);
 
 module.exports = {
-	test: function(doc){
-		var postcode = doc.get('Organisation_postcode');
-		if(postcode){
-			geocoder.geocode(postcode, function(err, res) {
-				models.Record.update({'Organisation_postcode':postcode}, {lat:res[0].latitude, lon:res[0].latitude}, function(err,data){
-					console.log('record updated: ' + data);
+	geocodePostcode: function(postcode){
+		geocoder.geocode(postcode, function(err, res) {
+			if(err){
+				console.log("Error geocoding: " + postcode + " / " + err);
+			} else {
+				//console.log(res[0]);
+				models.Record.update({'Organisation_postcode':postcode}, {Organisation_lat:res[0].latitude, Organisation_lon:res[0].longitude}, function(err,data){
+					if(err){
+						console.log("Error updating record: " + postcode + " / " + err);
+					} else {
+						console.log(postcode + " succesfully geocoded");
+					}
 				});
-			});
-		} else {
-			console.log("No postcode: " + doc);
-		}
-
+			}
+		});
 	}
 }

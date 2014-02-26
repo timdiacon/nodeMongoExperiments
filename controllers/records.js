@@ -35,15 +35,20 @@ module.exports = {
         console.log("init geo code address");
         res.json("This might take a while");
 
-        var query = models.Record.find({});
+        var query = models.Record.find({},null,{limit:null});
         var stream = query.stream();
 
         stream.on('data', function (doc) {
-            geo.test(doc);
+            var postcode = doc.get('Organisation_postcode');
+            if(postcode != undefined){
+                geo.geocodePostcode(postcode);
+            } else {
+                console.log('No postcode found');
+            }
         }).on('error', function (err) {
             console.log("Error: " + err);
         }).on('close', function () {
-            console.log("We're all done");
+            console.log("Stream Complete");
         });
     }
 };

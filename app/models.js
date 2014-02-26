@@ -7,8 +7,8 @@ var RecordSchema = new Schema({
     Organisation_address_line_1 : { type: String},
     Organisation_country : { type: String},
     Nature_of_Work_description: { type: String},
-    lat: {type: String},
-    lon: {type: String}
+    Organisation_lat: {type: Number},
+    Organisation_lon: {type: Number}
 });
 
 module.exports = {
