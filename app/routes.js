@@ -8,4 +8,5 @@ module.exports.initialize = function(app) {
     app.get('/api/records/:name/:skip', records.findByName);
     app.get('/api/recordcount/:name', records.getNameCount);
     app.get('/api/geocode', records.geocodeAddress);
+    app.get('/api/findNearMe/:postcode', records.findNearMe);
 };
